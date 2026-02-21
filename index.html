@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safe office — Employee Activity Monitoring</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===================== LOGIN PAGE ===================== -->
+  <div id="login-page" class="page active">
+    <!-- Animated grid background -->
+    <div class="bg-grid"></div>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <!-- Top bar -->
+    <div class="login-topbar">
+      <div class="logo-wordmark">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">SAFE<span class="logo-accent">OFFICE</span></span>
+      </div>
+      <div class="login-topbar-right">
+        <span id="login-datetime" class="mono-text"></span>
+      </div>
+    </div>
+
+    <div class="login-center">
+      <div class="login-card glass-card">
+        <!-- Card header glow line -->
+        <div class="card-glow-line"></div>
+
+        <div class="login-card-header">
+          <div class="shield-icon">
+            <svg viewBox="0 0 40 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 2L38 10V24C38 33.5 30 41.5 20 44C10 41.5 2 33.5 2 24V10L20 2Z" stroke="#00D4FF" stroke-width="2" fill="rgba(0,212,255,0.05)"/>
+              <path d="M13 23L18 28L27 18" stroke="#00D4FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h1 class="login-title">SAFE OFFICE</h1>
+          <p class="login-subtitle">Corporate Monitoring Portal — Authorized Personnel Only</p>
+        </div>
+
+        <!-- Device detection info -->
+        <div class="device-info-bar">
+          <div class="device-info-item">
+            <span class="dinfo-label">DEVICE</span>
+            <span id="dinfo-device" class="dinfo-value mono-text">—</span>
+          </div>
+          <div class="device-info-divider"></div>
+          <div class="device-info-item">
+            <span class="dinfo-label">BROWSER</span>
+            <span id="dinfo-browser" class="dinfo-value mono-text">—</span>
+          </div>
+          <div class="device-info-divider"></div>
+          <div class="device-info-item">
+            <span class="dinfo-label">OS</span>
+            <span id="dinfo-os" class="dinfo-value mono-text">—</span>
+          </div>
+        </div>
+
+        <form id="login-form" class="login-form" autocomplete="off">
+          <div class="form-group">
+            <label class="form-label" for="employee-id">EMPLOYEE ID</label>
+            <div class="input-wrapper">
+              <span class="input-icon">⬡</span>
+              <input type="text" id="employee-id" class="form-input" placeholder="e.g. EMP-20041" required />
+              <span class="input-focus-line"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">ACCESS CODE</label>
+            <div class="input-wrapper">
+              <span class="input-icon">◈</span>
+              <input type="password" id="password" class="form-input" placeholder="••••••••••" required />
+              <span class="input-focus-line"></span>
+            </div>
+          </div>
+
+          <div class="form-meta">
+            <label class="checkbox-label">
+              <input type="checkbox" id="remember-me" />
+              <span class="checkbox-custom"></span>
+              Remember this terminal
+            </label>
+            <a href="#" class="forgot-link">Access issues?</a>
+          </div>
+
+          <button type="submit" class="login-btn">
+            <span class="btn-text">INITIALIZE SESSION</span>
+            <span class="btn-arrow">→</span>
+            <div class="btn-shimmer"></div>
+          </button>
+        </form>
+
+        <div class="login-footer-note">
+          <span class="dot dot-green pulse"></span>
+          System Operational &nbsp;|&nbsp; All connections encrypted via TLS 1.3
+        </div>
+      </div>
+
+      <!-- Side info panel -->
+      <div class="login-side-panel">
+        <div class="side-stat-card glass-card-sm">
+          <div class="side-stat-label">ACTIVE SESSIONS</div>
+          <div class="side-stat-value" id="stat-sessions">247</div>
+          <div class="side-stat-bar"><div class="side-stat-fill" style="width:72%"></div></div>
+        </div>
+        <div class="side-stat-card glass-card-sm">
+          <div class="side-stat-label">ALERTS TODAY</div>
+          <div class="side-stat-value accent-red" id="stat-alerts">18</div>
+          <div class="side-stat-bar"><div class="side-stat-fill red" style="width:18%"></div></div>
+        </div>
+        <div class="side-stat-card glass-card-sm">
+          <div class="side-stat-label">RISK SCORE AVG</div>
+          <div class="side-stat-value accent-yellow">34<span style="font-size:0.6em">/100</span></div>
+          <div class="side-stat-bar"><div class="side-stat-fill yellow" style="width:34%"></div></div>
+        </div>
+        <div class="side-notice glass-card-sm">
+          <div class="notice-title">⚠ SYSTEM NOTICE</div>
+          <div class="notice-text">Scheduled maintenance window: Sun 02:00–04:00 UTC. Monitor activity may be reduced.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MAIN APP (after login) ===================== -->
+  <div id="app-page" class="page">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text sidebar-logo-text">SENTINEL<span class="logo-accent">CORE</span></span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="dashboard">
+          <span class="nav-icon">⊞</span>
+          <span class="nav-label">Dashboard</span>
+          <span class="nav-indicator"></span>
+        </a>
+        <a href="#" class="nav-item" data-section="activity">
+          <span class="nav-icon">◎</span>
+          <span class="nav-label">Activity Monitor</span>
+          <span class="nav-indicator"></span>
+        </a>
+        <a href="#" class="nav-item" data-section="alerts">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-label">Security Alerts</span>
+          <span class="nav-badge" id="nav-alert-badge">5</span>
+        </a>
+        <a href="#" class="nav-item" data-section="reports">
+          <span class="nav-icon">▤</span>
+          <span class="nav-label">Reports</span>
+          <span class="nav-indicator"></span>
+        </a>
+        <a href="#" class="nav-item" data-section="settings">
+          <span class="nav-icon">⊙</span>
+          <span class="nav-label">Settings</span>
+          <span class="nav-indicator"></span>
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="admin-info">
+          <div class="admin-avatar">A</div>
+          <div class="admin-details">
+            <div class="admin-name">Admin User</div>
+            <div class="admin-role mono-text">SUPER_ADMIN</div>
+          </div>
+        </div>
+        <button class="logout-btn" id="logout-btn">
+          <span>⏻</span> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top header bar -->
+      <header class="main-header">
+        <div class="header-left">
+          <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+          <div class="header-breadcrumb">
+            <span id="header-section-title">Dashboard</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="header-search">
+            <span>⊙</span>
+            <input type="text" placeholder="Search employees, events..." class="header-search-input" />
+          </div>
+          <div class="header-datetime mono-text" id="header-datetime"></div>
+          <div class="header-alert-bell" id="header-alert-bell">
+            <span>🔔</span>
+            <span class="bell-badge">5</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ===== DASHBOARD SECTION ===== -->
+      <section id="section-dashboard" class="content-section active">
+        <!-- KPI Row -->
+        <div class="kpi-row">
+          <div class="kpi-card glass-card">
+            <div class="kpi-icon kpi-blue">⊞</div>
+            <div class="kpi-info">
+              <div class="kpi-label">Total Employees</div>
+              <div class="kpi-value" id="kpi-total">1,284</div>
+              <div class="kpi-delta positive">+12 this month</div>
+            </div>
+          </div>
+          <div class="kpi-card glass-card">
+            <div class="kpi-icon kpi-green">◎</div>
+            <div class="kpi-info">
+              <div class="kpi-label">Active Now</div>
+              <div class="kpi-value" id="kpi-active">247</div>
+              <div class="kpi-delta positive">↑ 19.2% of workforce</div>
+            </div>
+          </div>
+          <div class="kpi-card glass-card">
+            <div class="kpi-icon kpi-yellow">⚠</div>
+            <div class="kpi-info">
+              <div class="kpi-label">Medium Risk</div>
+              <div class="kpi-value" id="kpi-medium">43</div>
+              <div class="kpi-delta neutral">Requires review</div>
+            </div>
+          </div>
+          <div class="kpi-card glass-card">
+            <div class="kpi-icon kpi-red">⬡</div>
+            <div class="kpi-info">
+              <div class="kpi-label">High Risk</div>
+              <div class="kpi-value" id="kpi-high">18</div>
+              <div class="kpi-delta negative glow-red">Immediate action</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="charts-row">
+          <div class="chart-card glass-card">
+            <div class="card-header">
+              <div class="card-title">Activity Trend — Last 7 Days</div>
+              <div class="card-actions">
+                <button class="chart-btn active" data-chart="trend">Week</button>
+                <button class="chart-btn" data-chart="trend">Month</button>
+              </div>
+            </div>
+            <canvas id="trend-chart" height="180"></canvas>
+          </div>
+          <div class="chart-card chart-card-sm glass-card">
+            <div class="card-header">
+              <div class="card-title">Risk Distribution</div>
+            </div>
+            <canvas id="risk-chart" height="200"></canvas>
+            <div class="risk-legend">
+              <div class="legend-item"><span class="legend-dot green"></span>Low Risk (68%)</div>
+              <div class="legend-item"><span class="legend-dot yellow"></span>Medium (19%)</div>
+              <div class="legend-item"><span class="legend-dot red"></span>High Risk (13%)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Activity Table + Alert Panel -->
+        <div class="bottom-row">
+          <!-- Activity Table -->
+          <div class="table-card glass-card">
+            <div class="card-header">
+              <div class="card-title">Employee Activity Log</div>
+              <div class="card-actions">
+                <button class="action-btn">Export CSV</button>
+                <button class="action-btn primary">Filter</button>
+              </div>
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table" id="activity-table">
+                <thead>
+                  <tr>
+                    <th>Employee</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Last Action</th>
+                    <th>Risk Score</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody id="activity-table-body">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Alert Notification Panel -->
+          <div class="alert-panel glass-card">
+            <div class="card-header">
+              <div class="card-title">Live Alerts</div>
+              <span class="live-badge pulse-bg">LIVE</span>
+            </div>
+            <div class="alert-list" id="dashboard-alert-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ACTIVITY MONITOR SECTION ===== -->
+      <section id="section-activity" class="content-section">
+        <div class="section-intro">
+          <h2 class="section-heading">Activity Monitor</h2>
+          <p class="section-desc">Real-time employee session tracking, behavior analysis, and anomaly detection.</p>
+        </div>
+
+        <div class="activity-filter-bar glass-card">
+          <input type="text" placeholder="Search employee or ID..." class="filter-input" id="activity-search" />
+          <select class="filter-select" id="activity-status-filter">
+            <option value="">All Status</option>
+            <option value="normal">Normal</option>
+            <option value="warning">Warning</option>
+            <option value="critical">Critical</option>
+          </select>
+          <select class="filter-select" id="activity-dept-filter">
+            <option value="">All Departments</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Finance">Finance</option>
+            <option value="HR">HR</option>
+            <option value="Sales">Sales</option>
+            <option value="IT">IT</option>
+          </select>
+          <button class="action-btn primary" id="apply-filter">Apply Filter</button>
+        </div>
+
+        <div class="activity-cards-grid" id="activity-cards-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ===== SECURITY ALERTS SECTION ===== -->
+      <section id="section-alerts" class="content-section">
+        <div class="section-intro">
+          <h2 class="section-heading">Security Alerts</h2>
+          <p class="section-desc">Suspicious activity logs, high-risk employee flags, and incident history.</p>
+        </div>
+
+        <div class="alerts-summary-row">
+          <div class="alert-summary-card glass-card critical-card">
+            <div class="asm-label">CRITICAL</div>
+            <div class="asm-value" id="asm-critical">3</div>
+          </div>
+          <div class="alert-summary-card glass-card">
+            <div class="asm-label">HIGH</div>
+            <div class="asm-value accent-red">15</div>
+          </div>
+          <div class="alert-summary-card glass-card">
+            <div class="asm-label">MEDIUM</div>
+            <div class="asm-value accent-yellow">27</div>
+          </div>
+          <div class="alert-summary-card glass-card">
+            <div class="asm-label">LOW</div>
+            <div class="asm-value accent-green">42</div>
+          </div>
+          <div class="alert-summary-card glass-card">
+            <div class="asm-label">RESOLVED</div>
+            <div class="asm-value">104</div>
+          </div>
+        </div>
+
+        <div class="alerts-timeline" id="alerts-timeline">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ===== REPORTS SECTION ===== -->
+      <section id="section-reports" class="content-section">
+        <div class="section-intro">
+          <h2 class="section-heading">Reports</h2>
+          <p class="section-desc">Generate, schedule, and download compliance and security reports.</p>
+        </div>
+        <div class="reports-grid">
+          <div class="report-card glass-card">
+            <div class="report-icon">▤</div>
+            <div class="report-title">Weekly Activity Summary</div>
+            <div class="report-desc">Comprehensive employee activity log for the past 7 days including session times, devices, and behavior scores.</div>
+            <div class="report-meta">Last generated: <span class="mono-text">2025-01-14 08:00</span></div>
+            <button class="action-btn primary full-btn">Generate Report</button>
+          </div>
+          <div class="report-card glass-card">
+            <div class="report-icon">⚡</div>
+            <div class="report-title">Security Incident Report</div>
+            <div class="report-desc">All high and critical security incidents in the selected date range with investigation notes.</div>
+            <div class="report-meta">Last generated: <span class="mono-text">2025-01-13 17:30</span></div>
+            <button class="action-btn primary full-btn">Generate Report</button>
+          </div>
+          <div class="report-card glass-card">
+            <div class="report-icon">◎</div>
+            <div class="report-title">Risk Trend Analysis</div>
+            <div class="report-desc">Statistical analysis of risk score trends across departments with predictive indicators.</div>
+            <div class="report-meta">Last generated: <span class="mono-text">2025-01-12 09:15</span></div>
+            <button class="action-btn primary full-btn">Generate Report</button>
+          </div>
+          <div class="report-card glass-card">
+            <div class="report-icon">⊞</div>
+            <div class="report-title">Compliance Audit Log</div>
+            <div class="report-desc">Full audit trail for regulatory compliance including access logs, policy violations, and data access events.</div>
+            <div class="report-meta">Last generated: <span class="mono-text">2025-01-10 11:00</span></div>
+            <button class="action-btn primary full-btn">Generate Report</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SETTINGS SECTION ===== -->
+      <section id="section-settings" class="content-section">
+        <div class="section-intro">
+          <h2 class="section-heading">Settings</h2>
+          <p class="section-desc">Configure monitoring thresholds, notifications, and system preferences.</p>
+        </div>
+        <div class="settings-grid">
+          <div class="settings-card glass-card">
+            <div class="settings-section-title">Alert Thresholds</div>
+            <div class="setting-row">
+              <label class="setting-label">High Risk Score Threshold</label>
+              <div class="setting-control">
+                <input type="range" min="50" max="100" value="75" class="range-input" id="high-threshold" />
+                <span class="range-value mono-text" id="high-threshold-val">75</span>
+              </div>
+            </div>
+            <div class="setting-row">
+              <label class="setting-label">Medium Risk Score Threshold</label>
+              <div class="setting-control">
+                <input type="range" min="20" max="74" value="40" class="range-input" id="med-threshold" />
+                <span class="range-value mono-text" id="med-threshold-val">40</span>
+              </div>
+            </div>
+            <div class="setting-row">
+              <label class="setting-label">Alert Email Frequency</label>
+              <select class="filter-select">
+                <option>Immediate</option>
+                <option>Every 15 min</option>
+                <option>Hourly</option>
+                <option>Daily Digest</option>
+              </select>
+            </div>
+          </div>
+          <div class="settings-card glass-card">
+            <div class="settings-section-title">Monitoring Preferences</div>
+            <div class="setting-row">
+              <label class="setting-label">Real-time Data Refresh</label>
+              <div class="toggle-switch" id="toggle-realtime">
+                <div class="toggle-knob"></div>
+              </div>
+            </div>
+            <div class="setting-row">
+              <label class="setting-label">Email Notifications</label>
+              <div class="toggle-switch active" id="toggle-email">
+                <div class="toggle-knob"></div>
+              </div>
+            </div>
+            <div class="setting-row">
+              <label class="setting-label">Slack Webhook Alerts</label>
+              <div class="toggle-switch" id="toggle-slack">
+                <div class="toggle-knob"></div>
+              </div>
+            </div>
+            <div class="setting-row">
+              <label class="setting-label">Audit Logging</label>
+              <div class="toggle-switch active" id="toggle-audit">
+                <div class="toggle-knob"></div>
+              </div>
+            </div>
+          </div>
+          <div class="settings-card glass-card">
+            <div class="settings-section-title">API Configuration</div>
+            <div class="setting-row column">
+              <label class="setting-label">Backend API Endpoint</label>
+              <input type="text" class="form-input" value="https://api.sentinelcore.io/v1" readonly />
+            </div>
+            <div class="setting-row column">
+              <label class="setting-label">API Key</label>
+              <input type="password" class="form-input" value="sk-live-xxxxxxxxxxxxxxxxxxxx" readonly />
+            </div>
+            <button class="action-btn primary full-btn">Update Configuration</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast notification container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
