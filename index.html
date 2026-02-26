@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAFE OFFICE — Smart Employee Activity Monitoring</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@200;300;400;500;600;700;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ========== PARTICLE CANVAS ========== -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- ============================================================
+       LOGIN PAGE
+  ============================================================ -->
+  <div id="loginPage" class="page active">
+    <div class="login-bg-grid"></div>
+
+    <!-- Animated scanner lines -->
+    <div class="scanner-line"></div>
+    <div class="scanner-line delay-1"></div>
+
+    <div class="login-wrapper">
+      <!-- Branding -->
+      <div class="login-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 60 60" fill="none">
+            <polygon points="30,4 54,18 54,42 30,56 6,42 6,18" stroke="#00D4FF" stroke-width="2" fill="none"/>
+            <polygon points="30,12 46,21 46,39 30,48 14,39 14,21" stroke="#00D4FF" stroke-width="1" fill="rgba(0,212,255,0.05)"/>
+            <circle cx="30" cy="30" r="6" fill="#00D4FF"/>
+            <line x1="30" y1="12" x2="30" y2="24" stroke="#00D4FF" stroke-width="1"/>
+            <line x1="30" y1="36" x2="30" y2="48" stroke="#00D4FF" stroke-width="1"/>
+            <line x1="14" y1="21" x2="24" y2="27" stroke="#00D4FF" stroke-width="1"/>
+            <line x1="36" y1="33" x2="46" y2="39" stroke="#00D4FF" stroke-width="1"/>
+            <line x1="46" y1="21" x2="36" y2="27" stroke="#00D4FF" stroke-width="1"/>
+            <line x1="24" y1="33" x2="14" y2="39" stroke="#00D4FF" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>SAFE OFFICE</h1>
+          <p>Smart Employee Activity Monitoring System</p>
+        </div>
+      </div>
+
+      <!-- Login Card -->
+      <div class="login-card glass-card">
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+
+        <div class="login-header">
+          <div class="status-dot pulse"></div>
+          <span class="login-status-text">SECURE CONNECTION ESTABLISHED</span>
+        </div>
+
+        <h2 class="login-title">SYSTEM ACCESS</h2>
+        <p class="login-subtitle">Authorized Personnel Only</p>
+
+        <!-- Date/Time -->
+        <div class="login-datetime">
+          <div class="datetime-date" id="loginDate"></div>
+          <div class="datetime-time mono" id="loginTime"></div>
+        </div>
+
+        <!--login Form -->
+        <!--employee id -->
+        <div class="login-form">
+          <div class="form-group">
+            <label class="form-label">EMPLOYEE ID</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="#00D4FF" stroke-width="1.5"/>
+                <circle cx="12" cy="7" r="4" stroke="#00D4FF" stroke-width="1.5"/>
+              </svg>
+              <input type="text" id="employeeId" class="form-input" placeholder="Enter Employee ID" autocomplete="off"/>
+              <div class="input-scan-line"></div>
+            </div>
+          </div>
+           <!--access code -->
+          <div class="form-group">
+            <label class="form-label">ACCESS CODE</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="11" width="18" height="11" rx="2" stroke="#00D4FF" stroke-width="1.5"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#00D4FF" stroke-width="1.5"/>
+              </svg>
+              <input type="password" id="accessCode" class="form-input" placeholder="••••••••" autocomplete="off"/>
+              <div class="input-scan-line"></div>
+            </div>
+          </div>
+          <!--Authenticate -->
+          <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+            <span class="btn-text">AUTHENTICATE</span>
+            <div class="btn-glow"></div>
+          </button>
+        </div>
+
+        <!-- About device info -->
+        <div class="device-info">
+          <div class="device-info-title">
+            <div class="status-dot mini"></div>
+            AUTO-DETECTED ENVIRONMENT
+          </div>
+          <div class="device-grid" id="deviceInfo"></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="login-footer">
+        <span>SAFE OFFICE v4.2.1</span>
+        <span>|</span>
+        <span>CLASSIFIED — DO NOT SHARE</span>
+        <span>|</span>
+        <span>© 2025 SAFE OFFICE  CORP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MAIN DASHBOARD SHELL
+  ============================================================ -->
+  <div id="dashboardPage" class="page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="s-logo-icon">
+          <svg viewBox="0 0 40 40" fill="none">
+            <polygon points="20,3 36,12 36,28 20,37 4,28 4,12" stroke="#00D4FF" stroke-width="1.5" fill="rgba(0,212,255,0.05)"/>
+            <circle cx="20" cy="20" r="5" fill="#00D4FF"/>
+          </svg>
+        </div>
+        <span class="s-logo-text">SAFE OFFICE</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">MAIN</div>
+        <a href="#" class="nav-item active" data-page="dashboardView" onclick="switchView('dashboardView',this)">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Dashboard</span>
+          <div class="nav-indicator"></div>
+        </a>
+        <a href="#" class="nav-item" data-page="activityView" onclick="switchView('activityView',this)">
+          <svg viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Activity Monitor</span>
+          <div class="nav-badge" id="activityBadge">LIVE</div>
+          <div class="nav-indicator"></div>
+        </a>
+        <a href="#" class="nav-item" data-page="alertsView" onclick="switchView('alertsView',this)">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2"/></svg>
+          <span>Security Alerts</span>
+          <div class="nav-count" id="alertCount">3</div>
+          <div class="nav-indicator"></div>
+        </a>
+
+        <div class="nav-section-label">ANALYTICS</div>
+        <a href="#" class="nav-item" data-page="reportsView" onclick="switchView('reportsView',this)">
+          <svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Reports</span>
+          <div class="nav-indicator"></div>
+        </a>
+
+        <div class="nav-section-label">SYSTEM</div>
+        <a href="#" class="nav-item" data-page="settingsView" onclick="switchView('settingsView',this)">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Settings</span>
+          <div class="nav-indicator"></div>
+        </a>
+      </nav>
+
+      <!-- Sidebar bottom -->
+      <div class="sidebar-bottom">
+        <div class="sidebar-system-status">
+          <div class="ss-row">
+            <span class="ss-label">System</span>
+            <div class="ss-bar"><div class="ss-fill" style="width:78%"></div></div>
+          </div>
+          <div class="ss-row">
+            <span class="ss-label">Network</span>
+            <div class="ss-bar"><div class="ss-fill cyan" style="width:91%"></div></div>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="handleLogout()">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="1.5"/><polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="topbar-title" id="topbarTitle">Dashboard Overview</div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-clock mono" id="topbarClock"></div>
+          <div class="topbar-pulse">
+            <div class="pulse-ring"></div>
+            <div class="pulse-dot"></div>
+            <span>LIVE</span>
+          </div>
+
+          <!-- PDF Download Button -->
+          <button class="pdf-download-btn" onclick="showPdfModal()" title="Download Report as PDF">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5"/>
+              <polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="12" y1="11" x2="12" y2="17" stroke="currentColor" stroke-width="1.5"/>
+              <polyline points="9 14 12 17 15 14" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span>EXPORT PDF</span>
+          </button>
+
+          <div class="topbar-user">
+            <div class="user-avatar">AD</div>
+            <div class="user-info">
+              <span class="user-name" id="topbarUser">Admin</span>
+              <span class="user-role">Security Admin</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- VIEW CONTAINER -->
+      <div class="view-container">
+
+        <!-- ====== DASHBOARD VIEW ====== -->
+        <section id="dashboardView" class="view active">
+
+          <!-- KPI Cards Row -->
+          <div class="kpi-grid">
+            <div class="kpi-card glass-card" data-risk="normal">
+              <div class="kpi-icon cyan">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="1.5"/><path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="kpi-data">
+                <div class="kpi-value" id="kpiActiveUsers">247</div>
+                <div class="kpi-label">Active Users</div>
+                <div class="kpi-delta positive">↑ 12 from yesterday</div>
+              </div>
+              <canvas class="kpi-sparkline" id="spark1"></canvas>
+            </div>
+
+            <div class="kpi-card glass-card" data-risk="high">
+              <div class="kpi-icon red">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div class="kpi-data">
+                <div class="kpi-value red-text" id="kpiAlerts">18</div>
+                <div class="kpi-label">Active Alerts</div>
+                <div class="kpi-delta negative">↑ 5 new today</div>
+              </div>
+              <canvas class="kpi-sparkline" id="spark2"></canvas>
+            </div>
+
+            <div class="kpi-card glass-card" data-risk="medium">
+              <div class="kpi-icon amber">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="kpi-data">
+                <div class="kpi-value amber-text" id="kpiSessions">1,842</div>
+                <div class="kpi-label">Sessions Today</div>
+                <div class="kpi-delta positive">↑ 8.3% vs avg</div>
+              </div>
+              <canvas class="kpi-sparkline" id="spark3"></canvas>
+            </div>
+
+            <div class="kpi-card glass-card" data-risk="normal">
+              <div class="kpi-icon green">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.5"/></svg>
+              </div>
+              <div class="kpi-data">
+                <div class="kpi-value green-text" id="kpiStability">94.2</div>
+                <div class="kpi-label">Stability Index</div>
+                <div class="kpi-delta positive">↑ 1.8 pts</div>
+              </div>
+              <canvas class="kpi-sparkline" id="spark4"></canvas>
+            </div>
+          </div>
+
+          <!-- Middle Row: Activity Pulse + Heatmap -->
+          <div class="mid-grid">
+            <!-- Organizational Activity Pulse -->
+            <div class="panel glass-card pulse-panel">
+              <div class="panel-header">
+                <h3>ORGANIZATIONAL ACTIVITY PULSE</h3>
+                <div class="panel-controls">
+                  <span class="live-badge">● LIVE</span>
+                </div>
+              </div>
+              <div class="pulse-chart-wrap">
+                <canvas id="pulseChart"></canvas>
+              </div>
+              <div class="pulse-stats">
+                <div class="ps-item">
+                  <span class="ps-val cyan-text">98.7ms</span>
+                  <span class="ps-label">Avg Latency</span>
+                </div>
+                <div class="ps-item">
+                  <span class="ps-val green-text">99.9%</span>
+                  <span class="ps-label">Uptime</span>
+                </div>
+                <div class="ps-item">
+                  <span class="ps-val amber-text">4.2 GB/s</span>
+                  <span class="ps-label">Data Flow</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Information Flow Heatmap -->
+            <div class="panel glass-card heatmap-panel">
+              <div class="panel-header">
+                <h3>INFORMATION FLOW HEATMAP</h3>
+                <div class="panel-controls">
+                  <select class="panel-select" onchange="updateHeatmap(this.value)">
+                    <option>Last 7 Days</option>
+                    <option>Last 24h</option>
+                    <option>Last 30d</option>
+                  </select>
+                </div>
+              </div>
+              <div class="heatmap-purpose">
+                <span class="hm-purpose-icon">ℹ</span>
+                Each cell = 1 hour of data activity across 7 days × 24 hours. Brighter color = more data accessed. <strong style="color:#ff3b5c">Red spike = suspicious off-hours access.</strong>
+              </div>
+              <div class="heatmap-hour-axis">
+                <div class="hm-axis-label">12AM</div>
+                <div class="hm-axis-label">3AM</div>
+                <div class="hm-axis-label">6AM</div>
+                <div class="hm-axis-label">9AM</div>
+                <div class="hm-axis-label">12PM</div>
+                <div class="hm-axis-label">3PM</div>
+                <div class="hm-axis-label">6PM</div>
+                <div class="hm-axis-label">9PM</div>
+              </div>
+              <div class="heatmap-body">
+                <div class="heatmap-day-labels">
+                  <div class="hm-day">MON</div>
+                  <div class="hm-day">TUE</div>
+                  <div class="hm-day">WED</div>
+                  <div class="hm-day">THU</div>
+                  <div class="hm-day">FRI</div>
+                  <div class="hm-day">SAT</div>
+                  <div class="hm-day">SUN</div>
+                </div>
+                <div class="heatmap-grid" id="heatmapGrid"></div>
+              </div>
+              <div class="heatmap-color-legend">
+                <div class="hcl-item"><div class="hcl-swatch" style="background:#060e1f;border:1px solid #1a3a5c"></div><span>No Activity<br/><em>Safe / Offline</em></span></div>
+                <div class="hcl-item"><div class="hcl-swatch" style="background:#004080"></div><span>Low Activity<br/><em>Normal</em></span></div>
+                <div class="hcl-item"><div class="hcl-swatch" style="background:#00D4FF"></div><span>Moderate<br/><em>Business Hours</em></span></div>
+                <div class="hcl-item"><div class="hcl-swatch" style="background:#FFB800;box-shadow:0 0 6px #FFB800"></div><span>High Activity<br/><em>Monitor Closely</em></span></div>
+                <div class="hcl-item"><div class="hcl-swatch" style="background:#ff3b5c;box-shadow:0 0 10px #ff3b5c"></div><span>Anomaly Spike<br/><em style="color:#ff3b5c">⚠ Investigate Now</em></span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row: Employee Table + Risk + Alerts -->
+          <div class="bottom-grid">
+            <!-- Employee Activity Table -->
+            <div class="panel glass-card table-panel">
+              <div class="panel-header">
+                <h3>EMPLOYEE ACTIVITY MONITOR</h3>
+                <div class="panel-controls">
+                  <div class="search-input-wrap">
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#00D4FF" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="#00D4FF" stroke-width="1.5"/></svg>
+                    <input type="text" placeholder="Search employee..." oninput="filterTable(this.value)" class="table-search"/>
+                  </div>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table class="data-table" id="employeeTable">
+                  <thead>
+                    <tr>
+                      <th>EMPLOYEE</th>
+                      <th>DEPARTMENT</th>
+                      <th>LOGIN</th>
+                      <th>SESSION</th>
+                      <th>DEVICE</th>
+                      <th>RISK</th>
+                      <th>STATUS</th>
+                      <th>ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody id="employeeTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Risk Distribution + Stability Index -->
+            <div class="side-panels">
+              <!-- Risk Distribution -->
+              <div class="panel glass-card risk-panel">
+                <div class="panel-header">
+                  <h3>RISK DISTRIBUTION</h3>
+                </div>
+                <div class="risk-donut-wrap">
+                  <canvas id="riskDonut"></canvas>
+                  <div class="donut-center">
+                    <div class="donut-val">73</div>
+                    <div class="donut-label">SAFE</div>
+                  </div>
+                </div>
+                <div class="risk-legend">
+                  <div class="rl-item"><div class="rl-dot green"></div><span>Low Risk</span><span class="rl-val">73%</span></div>
+                  <div class="rl-item"><div class="rl-dot amber"></div><span>Medium Risk</span><span class="rl-val">19%</span></div>
+                  <div class="rl-item"><div class="rl-dot red"></div><span>High Risk</span><span class="rl-val">8%</span></div>
+                </div>
+              </div>
+
+              <!-- Stability Index -->
+              <div class="panel glass-card stability-panel">
+                <div class="panel-header">
+                  <h3>STABILITY INDEX</h3>
+                </div>
+                <div class="stability-explainer">
+                  <span class="stab-exp-score">94.2</span>
+                  <div class="stab-exp-text">
+                    <div class="stab-exp-title">ORGANIZATION IS STABLE</div>
+                    <div class="stab-exp-desc">Score drops when employees behave abnormally. Below 70 = danger zone.</div>
+                  </div>
+                </div>
+                <div class="stability-gauge-wrap">
+                  <svg viewBox="0 0 200 120" class="gauge-svg" id="stabilityGauge">
+                    <!-- Background arc -->
+                    <path d="M 20 100 A 80 80 0 0 1 180 100" stroke="#1a3a5c" stroke-width="12" fill="none" stroke-linecap="round"/>
+                    <!-- Colored arc -->
+                    <path d="M 20 100 A 80 80 0 0 1 180 100" stroke="url(#gaugeGrad)" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="65" id="gaugeFill"/>
+                    <defs>
+                      <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#ff4444"/>
+                        <stop offset="50%" stop-color="#FFB800"/>
+                        <stop offset="100%" stop-color="#00ff88"/>
+                      </linearGradient>
+                    </defs>
+                    <!-- Needle -->
+                    <line x1="100" y1="100" x2="100" y2="28" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" id="gaugeNeedle" transform-origin="100 100" style="transform:rotate(40deg)"/>
+                    <circle cx="100" cy="100" r="6" fill="#00D4FF"/>
+                    <!-- Value -->
+                    <text x="100" y="92" text-anchor="middle" fill="white" font-size="22" font-family="Rajdhani" font-weight="700" id="gaugeValue">94.2</text>
+                    <text x="100" y="112" text-anchor="middle" fill="#8899aa" font-size="9" font-family="Rajdhani">OUT OF 100</text>
+                    <text x="100" y="126" text-anchor="middle" fill="#00e676" font-size="8" font-family="Share Tech Mono" id="gaugeStatusLabel">● VERY STABLE</text>
+                  </svg>
+                </div>
+                <div class="stability-metrics">
+                  <div class="sm-item"><span class="sm-label">Data Integrity</span><div class="sm-bar"><div class="sm-fill" style="width:96%"></div></div></div>
+                  <div class="sm-item"><span class="sm-label">Access Control</span><div class="sm-bar"><div class="sm-fill" style="width:88%"></div></div></div>
+                  <div class="sm-item"><span class="sm-label">Behavior Norm</span><div class="sm-bar"><div class="sm-fill amber-fill" style="width:74%"></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====== ACTIVITY MONITOR VIEW ====== -->
+        <section id="activityView" class="view">
+          <div class="view-header">
+            <h2 class="view-title">ACTIVITY MONITOR</h2>
+            <div class="view-subtitle">Real-time employee behavior tracking and navigation pattern analysis</div>
+          </div>
+
+          <!-- Activity Stats -->
+          <div class="activity-stats-grid">
+            <div class="activity-stat glass-card">
+              <div class="as-val cyan-text mono" id="asTotalEvents">48,291</div>
+              <div class="as-label">Total Events (24h)</div>
+            </div>
+            <div class="activity-stat glass-card">
+              <div class="as-val amber-text mono">1,284</div>
+              <div class="as-label">Flagged Actions</div>
+            </div>
+            <div class="activity-stat glass-card">
+              <div class="as-val green-text mono">3h 42m</div>
+              <div class="as-label">Avg Session Duration</div>
+              <div class="as-explain">Time each employee stays logged in. Normal: 6-9h. &gt;12h or odd hours = flagged.</div>
+            </div>
+            <div class="activity-stat glass-card">
+              <div class="as-val red-text mono">23</div>
+              <div class="as-label">Off-Hours Logins</div>
+            </div>
+          </div>
+
+          <div class="activity-main-grid">
+            <!-- Navigation Pattern Map -->
+            <div class="panel glass-card nav-panel">
+              <div class="panel-header">
+                <h3>NAVIGATION PATTERN MAP</h3>
+                <span class="live-badge">● LIVE</span>
+              </div>
+              <div class="nav-purpose-bar">
+                <div class="npb-item"><div class="npb-line cyan"></div><span>Normal path — expected navigation</span></div>
+                <div class="npb-item"><div class="npb-line red"></div><span>Suspicious path — unauthorized area access</span></div>
+                <div class="npb-item"><div class="npb-circle green"></div><span>Entry / Exit point</span></div>
+                <div class="npb-item"><div class="npb-circle red"></div><span>Restricted zone accessed</span></div>
+              </div>
+              <div class="nav-map-container" id="navMapContainer">
+                <svg viewBox="0 0 600 340" class="nav-flow-svg" id="navFlowSvg"></svg>
+              </div>
+            </div>
+
+            <!-- Access Footprints -->
+            <div class="panel glass-card footprint-panel">
+              <div class="panel-header">
+                <h3>ACCESS FOOTPRINTS</h3>
+              </div>
+              <div class="footprint-list" id="footprintList"></div>
+            </div>
+          </div>
+
+          <!-- Detailed Activity Log -->
+          <div class="panel glass-card activity-log-panel">
+            <div class="panel-header">
+              <h3>DETAILED ACTIVITY LOG</h3>
+              <div class="panel-controls">
+                <div class="filter-pills">
+                  <button class="pill active" onclick="filterActivity('all',this)">All</button>
+                  <button class="pill" onclick="filterActivity('login',this)">Login/Logout</button>
+                  <button class="pill" onclick="filterActivity('file',this)">File Access</button>
+                  <button class="pill" onclick="filterActivity('alert',this)">Alerts</button>
+                </div>
+              </div>
+            </div>
+            <div class="activity-log-stream" id="activityLogStream"></div>
+          </div>
+        </section>
+
+        <!-- ====== SECURITY ALERTS VIEW ====== -->
+        <section id="alertsView" class="view">
+          <div class="view-header">
+            <h2 class="view-title">SECURITY ALERTS</h2>
+            <div class="view-subtitle">Suspicious activity detection, incident management, and threat analysis</div>
+          </div>
+
+          <!-- Alert Summary -->
+          <div class="alert-summary-grid">
+            <div class="alert-summary-card glass-card critical">
+              <div class="asc-icon">⚠</div>
+              <div class="asc-count red-text" id="criticalCount">3</div>
+              <div class="asc-label">Critical</div>
+            </div>
+            <div class="alert-summary-card glass-card high">
+              <div class="asc-icon">▲</div>
+              <div class="asc-count amber-text" id="highCount">7</div>
+              <div class="asc-label">High</div>
+            </div>
+            <div class="alert-summary-card glass-card medium">
+              <div class="asc-icon">◆</div>
+              <div class="asc-count cyan-text" id="mediumCount">12</div>
+              <div class="asc-label">Medium</div>
+            </div>
+            <div class="alert-summary-card glass-card low">
+              <div class="asc-icon">●</div>
+              <div class="asc-count green-text" id="lowCount">31</div>
+              <div class="asc-label">Low</div>
+            </div>
+          </div>
+
+          <div class="alerts-content-grid">
+            <!-- Alert Feed -->
+            <div class="panel glass-card alerts-feed-panel">
+              <div class="panel-header">
+                <h3>INCIDENT FEED</h3>
+                <div class="panel-controls">
+                  <select class="panel-select" id="alertSeverityFilter" onchange="filterAlerts()">
+                    <option value="all">All Severities</option>
+                    <option value="critical">Critical</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                  </select>
+                </div>
+              </div>
+              <div class="alerts-list" id="alertsList"></div>
+            </div>
+
+            <!-- High Risk Employees + Timeline -->
+            <div class="alerts-side">
+              <div class="panel glass-card high-risk-panel">
+                <div class="panel-header">
+                  <h3>HIGH RISK EMPLOYEES</h3>
+                </div>
+                <div class="high-risk-list" id="highRiskList"></div>
+              </div>
+
+              <div class="panel glass-card timeline-panel">
+                <div class="panel-header">
+                  <h3>INCIDENT TIMELINE</h3>
+                </div>
+                <div class="timeline-explainer">
+                  Chronological log of all security events today. Most recent at top. Color = severity level.
+                </div>
+                <div class="timeline" id="incidentTimeline"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====== REPORTS VIEW ====== -->
+        <section id="reportsView" class="view">
+          <div class="view-header">
+            <h2 class="view-title">ANALYTICS & REPORTS</h2>
+            <div class="view-subtitle">Behavior patterns, risk analytics, and organizational intelligence</div>
+          </div>
+
+          <div class="reports-grid">
+            <!-- Activity Trend Chart -->
+            <div class="panel glass-card chart-panel-large">
+              <div class="panel-header">
+                <h3>SECURITY ACTIVITY TREND — LAST 7 DAYS</h3>
+                <div class="panel-controls">
+                  <div class="chart-legend">
+                    <div class="cl-item"><div class="cl-dot cyan"></div>Normal Activity (total events/day)</div>
+                    <div class="cl-item"><div class="cl-dot red"></div>Suspicious Events (flagged actions)</div>
+                  </div>
+                </div>
+              </div>
+              <div class="trend-explainer">
+                <span class="te-icon">📊</span>
+                <span>The <strong style="color:#00D4FF">blue area</strong> shows how many normal actions employees performed each day (logins, file access, reports). The <strong style="color:#ff3b5c">red bars</strong> show suspicious events flagged by the system. Higher red bars on any day = more risk that day.</span>
+              </div>
+              <canvas id="trendChart" style="height:220px"></canvas>
+            </div>
+
+            <!-- Behavior Pattern Radar -->
+            <div class="panel glass-card chart-panel-sm">
+              <div class="panel-header">
+                <h3>EMPLOYEE BEHAVIOUR PATTERN</h3>
+                <select class="panel-select" id="behaviorEmployeeSelect" onchange="updateBehaviorRadar(this.value)">
+                  <option value="0">Arjun Kumar</option>
+                  <option value="1">Priya Sharma</option>
+                  <option value="2">Ravi Patel</option>
+                  <option value="3">Rohit Reddy</option>
+                  <option value="4">Sanjay Rao</option>
+                </select>
+              </div>
+              <div class="behavior-explainer">
+                <span style="color:#00D4FF;font-weight:700">How to read:</span> A small balanced shape = normal employee. A shape spiking outward on any axis = abnormal behaviour in that area.
+              </div>
+              <canvas id="behaviorRadar"></canvas>
+              <div class="behavior-normal-ref">
+                <div class="bnr-dot"></div>
+                <span>Grey dotted line = Normal baseline for this role</span>
+              </div>
+            </div>
+
+            <!-- Department Risk -->
+            <div class="panel glass-card chart-panel-sm">
+              <div class="panel-header"><h3>DEPARTMENT RISK LEVELS</h3></div>
+              <canvas id="deptRiskChart"></canvas>
+            </div>
+
+            <!-- Statistics Table -->
+            <div class="panel glass-card stats-table-panel">
+              <div class="panel-header"><h3>EMPLOYEE RISK SCORECARD</h3></div>
+              <div class="table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>EMPLOYEE</th><th>DEPT</th><th>RISK SCORE</th><th>EVENTS</th><th>TREND</th><th>STATUS</th></tr>
+                  </thead>
+                  <tbody id="scorecardBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====== SETTINGS VIEW ====== -->
+        <section id="settingsView" class="view">
+          <div class="view-header">
+            <h2 class="view-title">SYSTEM SETTINGS</h2>
+            <div class="view-subtitle">Configure monitoring thresholds, notifications, and system preferences</div>
+          </div>
+
+          <div class="settings-grid">
+            <div class="panel glass-card settings-panel">
+              <div class="panel-header"><h3>MONITORING THRESHOLDS</h3></div>
+              <div class="settings-form">
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Risk Score Alert Threshold</span>
+                    <span class="setting-desc">Alert when risk score exceeds this value</span>
+                  </div>
+                  <div class="setting-control">
+                    <input type="range" min="0" max="100" value="75" class="range-input" oninput="this.nextElementSibling.textContent=this.value"/>
+                    <span class="range-val">75</span>
+                  </div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Session Duration Alert (min)</span>
+                    <span class="setting-desc">Flag sessions exceeding this duration</span>
+                  </div>
+                  <div class="setting-control">
+                    <input type="range" min="60" max="600" value="240" class="range-input" oninput="this.nextElementSibling.textContent=this.value+'m'"/>
+                    <span class="range-val">240m</span>
+                  </div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Off-Hours Detection</span>
+                    <span class="setting-desc">Monitor activity outside business hours</span>
+                  </div>
+                  <div class="setting-control">
+                    <label class="toggle-switch">
+                      <input type="checkbox" checked/>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Real-time Alerts</span>
+                    <span class="setting-desc">Send instant notifications for high-severity events</span>
+                  </div>
+                  <div class="setting-control">
+                    <label class="toggle-switch">
+                      <input type="checkbox" checked/>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Anomaly Detection Sensitivity</span>
+                    <span class="setting-desc">Machine learning model sensitivity level</span>
+                  </div>
+                  <div class="setting-control">
+                    <select class="panel-select">
+                      <option>High</option>
+                      <option selected>Medium</option>
+                      <option>Low</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel glass-card settings-panel">
+              <div class="panel-header"><h3>NOTIFICATION SETTINGS</h3></div>
+              <div class="settings-form">
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Email Alerts</span>
+                    <span class="setting-desc"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dfacbabcaaadb6aba6f2abbabeb29fb0adb8beb1b6a5beabb6b0b1f1bcb0b2">[email&#160;protected]</a></span>
+                  </div>
+                  <div class="setting-control">
+                    <label class="toggle-switch">
+                      <input type="checkbox" checked/>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Slack Integration</span>
+                    <span class="setting-desc">#security-alerts channel</span>
+                  </div>
+                  <div class="setting-control">
+                    <label class="toggle-switch">
+                      <input type="checkbox"/>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Daily Report</span>
+                    <span class="setting-desc">Automated 8:00 AM summary report</span>
+                  </div>
+                  <div class="setting-control">
+                    <label class="toggle-switch">
+                      <input type="checkbox" checked/>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <button class="save-btn">SAVE CONFIGURATION</button>
+            </div>
+
+            <div class="panel glass-card settings-panel system-info-panel">
+              <div class="panel-header"><h3>SYSTEM INFORMATION</h3></div>
+              <div class="sys-info-grid">
+                <div class="si-item"><span class="si-key">Version</span><span class="si-val mono">SAFE OFFICE v4.2.1</span></div>
+                <div class="si-item"><span class="si-key">License</span><span class="si-val">Enterprise</span></div>
+                <div class="si-item"><span class="si-key">Nodes</span><span class="si-val mono">12 Active</span></div>
+                <div class="si-item"><span class="si-key">DB Size</span><span class="si-val mono">847.2 GB</span></div>
+                <div class="si-item"><span class="si-key">Last Backup</span><span class="si-val mono cyan-text">2h 14m ago</span></div>
+                <div class="si-item"><span class="si-key">ML Model</span><span class="si-val mono">v3.8 — Updated</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /view-container -->
+    </main>
+  </div><!-- /dashboardPage -->
+
+  <!-- ========== TOAST NOTIFICATION ========== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ========== ALERT DETAIL MODAL ========== -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal glass-card" onclick="event.stopPropagation()" id="alertModal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Alert Details</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+           </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- ========== PDF EXPORT MODAL ========== -->
+  <div class="modal-overlay" id="pdfModalOverlay" onclick="closePdfModal()">
+    <div class="modal glass-card pdf-modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3>EXPORT SECURITY REPORT — PDF</h3>
+        <button class="modal-close" onclick="closePdfModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="pdf-section-label">SELECT REPORT TYPE</div>
+        <div class="pdf-report-types">
+          <label class="pdf-type-card active" id="rtype-full">
+            <input type="radio" name="reportType" value="full" checked onchange="selectReportType(this)"/>
+            <div class="ptc-icon">📊</div>
+            <div class="ptc-name">Full Security Report</div>
+            <div class="ptc-desc">All KPIs, alerts, employee table, risk scores</div>
+          </label>
+          <label class="pdf-type-card" id="rtype-alerts">
+            <input type="radio" name="reportType" value="alerts" onchange="selectReportType(this)"/>
+            <div class="ptc-icon">⚠️</div>
+            <div class="ptc-name">Alerts Only</div>
+            <div class="ptc-desc">Incident feed and high-risk employees</div>
+          </label>
+          <label class="pdf-type-card" id="rtype-employees">
+            <input type="radio" name="reportType" value="employees" onchange="selectReportType(this)"/>
+            <div class="ptc-icon">👥</div>
+            <div class="ptc-name">Employee Activity</div>
+            <div class="ptc-desc">Activity table and risk scorecard</div>
+          </label>
+          <label class="pdf-type-card" id="rtype-executive">
+            <input type="radio" name="reportType" value="executive" onchange="selectReportType(this)"/>
+            <div class="ptc-icon">📋</div>
+            <div class="ptc-name">Executive Summary</div>
+            <div class="ptc-desc">High-level KPIs and stability index only</div>
+          </label>
+        </div>
+        <div class="pdf-section-label" style="margin-top:20px">INCLUDE SECTIONS</div>
+        <div class="pdf-checkboxes">
+          <label class="pdf-check"><input type="checkbox" id="inc-kpi" checked/><span>KPI Summary Cards</span></label>
+          <label class="pdf-check"><input type="checkbox" id="inc-employees" checked/><span>Employee Activity Table</span></label>
+          <label class="pdf-check"><input type="checkbox" id="inc-alerts" checked/><span>Security Alerts</span></label>
+          <label class="pdf-check"><input type="checkbox" id="inc-risk" checked/><span>Risk Distribution</span></label>
+          <label class="pdf-check"><input type="checkbox" id="inc-stability" checked/><span>Stability Index</span></label>
+          <label class="pdf-check"><input type="checkbox" id="inc-footprints"/><span>Access Footprints</span></label>
+        </div>
+        <div class="pdf-section-label" style="margin-top:20px">REPORT DETAILS</div>
+        <div class="pdf-meta-grid">
+          <div class="pdf-meta-item">
+            <label class="form-label">REPORT TITLE</label>
+            <input type="text" id="pdfTitle" class="form-input" style="padding:10px 14px;font-size:12px" value="SAFE OFFICE ANALYTICS REPORT"/>
+          </div>
+          <div class="pdf-meta-item">
+            <label class="form-label">PREPARED BY</label>
+            <input type="text" id="pdfAuthor" class="form-input" style="padding:10px 14px;font-size:12px" value="Security Admin"/>
+          </div>
+          <div class="pdf-meta-item">
+            <label class="form-label">CLASSIFICATION</label>
+            <select class="panel-select" id="pdfClass" style="padding:10px 14px;font-size:12px;width:100%;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.12);border-radius:8px;color:#7a9ab8">
+              <option>CONFIDENTIAL</option>
+              <option>INTERNAL USE ONLY</option>
+              <option>RESTRICTED</option>
+              <option>TOP SECRET</option>
+            </select>
+          </div>
+          <div class="pdf-meta-item">
+            <label class="form-label">PERIOD</label>
+            <select class="panel-select" id="pdfPeriod" style="padding:10px 14px;font-size:12px;width:100%;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.12);border-radius:8px;color:#7a9ab8">
+              <option>Last 24 Hours</option>
+              <option>Last 7 Days</option>
+              <option>Last 30 Days</option>
+              <option>Last Quarter</option>
+            </select>
+          </div>
+        </div>
+        <div class="pdf-preview-info">
+          <div class="ppi-icon">ℹ</div>
+          <div class="ppi-text">The PDF will open in a print dialog. Select <strong>"Save as PDF"</strong> as the destination to download. Best results in Chrome or Edge.</div>
+        </div>
+        <div class="pdf-actions">
+          <button class="pdf-cancel-btn" onclick="closePdfModal()">CANCEL</button>
+          <button class="pdf-generate-btn" onclick="generatePDF()">
+            <svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px;flex-shrink:0">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5"/>
+              <polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="12" y1="11" x2="12" y2="17" stroke="currentColor" stroke-width="1.5"/>
+              <polyline points="9 14 12 17 15 14" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            GENERATE &amp; DOWNLOAD PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden PDF Print Area -->
+  <div id="pdfPrintArea" style="display:none"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
